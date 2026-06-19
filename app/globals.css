@@ -1,26 +1,267 @@
-@import "tailwindcss";
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --c-bg: #f0e6d0;
+  --c-bg-alt: #e8dac4;
+  --c-border: #d4c4a8;
+  --c-text: #111111;
+  --c-muted: #7a6a58;
+  --c-accent: #111111;
+  --c-accent-fg: #f0e6d0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --font-heading: var(--font-lobster);
+  --font-body: var(--font-lato);
+  font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading, system-ui, -apple-system, sans-serif);
+}
+
+/* ── Sidebar mobile ───────────────────────────────────────── */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 600;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: var(--c-bg);
+  border: 2px solid var(--c-border);
+  cursor: pointer;
+}
+.sidebar-toggle span {
+  display: block;
+  height: 2px;
+  background: var(--c-text);
+  transition: opacity 0.2s;
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 400;
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle { display: flex; }
+  .sidebar-backdrop.is-open { display: block; }
+
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh !important;
+    z-index: 500;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    width: 280px !important;
+    overflow-y: auto;
+  }
+  .sidebar.is-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.18);
+  }
+  .sidebar-close { display: block !important; }
+  .sidebar { position: relative; }
+}
+
+/* ── Sub-500px content fixes ──────────────────────────────── */
+@media (max-width: 499px) {
+  /* Collapse all 2-col and 3-col grids to single column */
+  .grid-sep { display: none !important; }
+  .grid-2col {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  .grid-3col {
+    grid-template-columns: 1fr 1fr !important;
+    height: auto !important;
+  }
+
+  /* 3-col cafe grid: 2 images top row, 1 full-width bottom — no empty 4th cell */
+  .grid-3col > *:last-child { grid-column: 1 / -1; }
+
+  /* Hero and activities overlay images: taller on mobile so text doesn't overflow */
+  #hero > div > div:first-child,
+  #activities > div:first-child > div:first-child {
+    aspect-ratio: 4/3 !important;
+  }
+
+  /* Give image containers a fixed height when stacked */
+  .grid-img { height: 200px; }
+  #cafe .grid-img { height: 240px; }
+
+  /* Reduce text padding */
+  .section-text { padding: 28px 20px !important; }
+
+  /* Hero overlay text area */
+  .hero-content { padding: 20px 20px 10px 15px !important; }
+  #hero > div > div:last-child { padding-bottom: 10px !important; padding-left: 15px !important; }
+
+  /* Activities overlay */
+  .overlay-content { padding: 0 !important; }
+  #activities > div:first-child > div:last-child { padding-left: 28px !important; }
+
+  /* Contact section */
+  .section-contact { padding: 40px 20px 64px !important; max-width: 100% !important; }
+
+  /* Contact form: name + email stack vertically */
+  .form-grid { grid-template-columns: 1fr !important; }
+
+  /* Lookbook hero image height */
+  .hero-img { height: 300px !important; }
+
+  /* Nav links spacing */
+  .main-nav { gap: 16px !important; }
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 10px 24px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 2px solid var(--c-accent);
+  color: var(--c-accent);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  text-decoration: none;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+.btn:hover { opacity: 0.7; }
+
+[data-btn="rounded"]  .btn { border-radius: 6px; }
+[data-btn="pill"]     .btn { border-radius: 999px; padding-left: 32px; padding-right: 32px; }
+[data-btn="shadow"]   .btn { box-shadow: 3px 4px 0 #d4907a; }
+[data-btn="dashed"]   .btn { border-style: dashed; }
+[data-btn="filled"]   .btn { background: var(--c-accent); color: var(--c-accent-fg); }
+[data-btn="tropical"] .btn { border-color: #c8808c; color: #c8808c; box-shadow: 3px 4px 0 #c8808c; }
+
+/* ── Text effects ─────────────────────────────────────────── */
+
+/* Drop Shadow — per-section color matches each section border */
+[data-text-fx="coral-drop"] #hero h1,
+[data-text-fx="coral-drop"] #hero h2  { text-shadow: 3px 4px 0 #d4907a; }
+[data-text-fx="coral-drop"] #cafe h2  { text-shadow: 3px 4px 0 #c8808c; }
+[data-text-fx="coral-drop"] #guesthouse h2 { text-shadow: 3px 4px 0 #b080a8; }
+[data-text-fx="coral-drop"] #activities h2 { text-shadow: 3px 4px 0 #7aaab0; }
+[data-text-fx="coral-drop"] #contact h2    { text-shadow: 3px 4px 0 #6baead; }
+
+/* Teal Glow */
+[data-text-fx="teal-glow"] h1,
+[data-text-fx="teal-glow"] h2,
+[data-text-fx="teal-glow"] h3 {
+  color: #4a9a9d !important;
+  text-shadow: 0 2px 18px rgba(107, 174, 173, 0.75), 0 0 40px rgba(107, 174, 173, 0.3);
+}
+
+/* Pink Pop */
+[data-text-fx="pink-pop"] h1,
+[data-text-fx="pink-pop"] h2,
+[data-text-fx="pink-pop"] h3 {
+  color: #c8808c !important;
+  text-shadow: 2px 3px 0 rgba(200, 128, 140, 0.22);
+}
+
+/* Mauve Warm */
+[data-text-fx="mauve-warm"] h1,
+[data-text-fx="mauve-warm"] h2,
+[data-text-fx="mauve-warm"] h3 {
+  color: #b080a8 !important;
+  text-shadow: 2px 3px 0 rgba(176, 128, 168, 0.28);
+}
+
+/* Tropical — base (layered shadows, pink text) */
+[data-text-fx="tropical"] h1,
+[data-text-fx="tropical"] h2,
+[data-text-fx="tropical"] h3 {
+  color: #c8808c !important;
+  text-shadow: 3px 4px 0 #d4907a, 6px 7px 0 rgba(107, 174, 173, 0.55);
+}
+
+/* Tropical Outline — cream text + dark stroke + color shadows */
+[data-text-fx="tropical-outline"] h1,
+[data-text-fx="tropical-outline"] h2,
+[data-text-fx="tropical-outline"] h3 {
+  color: #f0e6d0 !important;
+  -webkit-text-stroke: 2px #111;
+  text-shadow: 3px 4px 0 #c8808c, 7px 8px 0 #6baead;
+}
+
+/* Tropical Cream — light text, deep stacked shadows */
+[data-text-fx="tropical-cream"] h1,
+[data-text-fx="tropical-cream"] h2,
+[data-text-fx="tropical-cream"] h3 {
+  color: #f5ede0 !important;
+  text-shadow: 4px 5px 0 #c8808c, 8px 9px 0 #d4907a, 13px 14px 0 #6baead;
+}
+
+/* Tropical Dark — pink text with a deep dark underlay shadow */
+[data-text-fx="tropical-dark"] h1,
+[data-text-fx="tropical-dark"] h2,
+[data-text-fx="tropical-dark"] h3 {
+  color: #c8808c !important;
+  text-shadow: 3px 4px 0 #d4907a, 6px 7px 0 #6baead, 9px 10px 0 #1a0e08;
+}
+
+/* Tropical Cream + Section Drop — hero gets tropical cream, sections get per-section drop */
+[data-text-fx="tropical-drop"] #hero h1,
+[data-text-fx="tropical-drop"] #hero h2   { color: #f5ede0 !important; text-shadow: 4px 5px 0 #c8808c, 8px 9px 0 #d4907a, 13px 14px 0 #6baead; }
+[data-text-fx="tropical-drop"] #cafe h2        { text-shadow: 3px 4px 0 #c8808c; }
+[data-text-fx="tropical-drop"] #guesthouse h2  { text-shadow: 3px 4px 0 #b080a8; }
+[data-text-fx="tropical-drop"] #activities h2  { text-shadow: 3px 4px 0 #7aaab0; }
+[data-text-fx="tropical-drop"] #contact h2     { text-shadow: 3px 4px 0 #6baead; }
+
+/* Tropical Strip — dark band behind cream text */
+[data-text-fx="tropical-strip"] h1,
+[data-text-fx="tropical-strip"] h2,
+[data-text-fx="tropical-strip"] h3 {
+  color: #f0e6d0 !important;
+  background: rgba(15, 8, 0, 0.62) !important;
+  padding: 4px 16px !important;
+  text-shadow: 2px 3px 0 #c8808c, 5px 6px 0 #6baead;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
