@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { COPY, IMAGES, Photo, NavLinks, ContactFormRaw, Btn } from "../content";
 import { MenuLightbox } from "../MenuLightbox";
 
@@ -49,8 +50,7 @@ export default function SidebarLayout() {
         >✕</button>
 
         <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={IMAGES.logo} alt={COPY.brandFull} style={{ width: "100%", height: "auto", display: "block", mixBlendMode: "multiply" }} />
+          <Image src={IMAGES.logo} alt={COPY.brandFull} width={1310} height={441} style={{ width: "100%", height: "auto", display: "block", mixBlendMode: "multiply" }} priority />
         </div>
         <div style={{ borderTop: "1px solid var(--c-border)", marginTop: "32px", paddingTop: "32px" }}>
           <NavLinks direction="column" />
@@ -66,7 +66,7 @@ export default function SidebarLayout() {
         {/* Hero */}
         <section id="hero" style={{ borderBottom: S.coral }}>
           <div style={{ position: "relative" }}>
-            <Photo src={IMAGES.hero} label="Mama's" ratio="16/7" />
+            <Photo src={IMAGES.hero} label="Mama's" ratio="16/7" sizes="(max-width: 768px) 100vw, calc(100vw - 260px)" priority />
             <div style={{
               position: "absolute", inset: 0,
               background: "linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 60%)",
@@ -90,9 +90,8 @@ export default function SidebarLayout() {
         {/* Cafe */}
         <section id="cafe" style={{ borderBottom: S.pink }}>
           <div className="grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 4px 1fr", height: "420px" }}>
-            <div className="grid-img" style={{ overflow: "hidden" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={IMAGES.dinner} alt="Cafe food" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <div className="grid-img" style={{ overflow: "hidden", position: "relative" }}>
+              <Image src={IMAGES.dinner} alt="Cafe food" fill sizes="(max-width: 768px) 100vw, calc((100vw - 260px) / 2)" style={{ objectFit: "cover" }} />
             </div>
             <Sep color={C.pink} />
             <div className="section-text" style={{ padding: "48px 48px 48px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -120,9 +119,8 @@ export default function SidebarLayout() {
               <p style={{ fontSize: "15px", lineHeight: 1.7, color: "var(--c-muted)", marginTop: "16px" }}>{COPY.guesthouseBody}</p>
             </div>
             <Sep color={C.mauve} />
-            <div className="grid-img" style={{ overflow: "hidden" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={IMAGES.roomBed} alt="Room" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            <div className="grid-img" style={{ overflow: "hidden", position: "relative" }}>
+              <Image src={IMAGES.roomBed} alt="Room" fill sizes="(max-width: 768px) 100vw, calc((100vw - 260px) / 2)" style={{ objectFit: "cover" }} />
             </div>
           </div>
         </section>

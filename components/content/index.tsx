@@ -1,6 +1,8 @@
 // Central content — copy, images, and shared UI atoms.
 // Edit here once; all three layouts pick it up automatically.
 
+import Image from "next/image";
+
 export const COPY = {
   brand: "Mama's",
   brandFull: "Mama's Guesthouse & Cafe",
@@ -57,14 +59,15 @@ interface PhotoProps {
   ratio?: string;
   fit?: "cover" | "contain";
   style?: React.CSSProperties;
+  sizes?: string;
+  priority?: boolean;
 }
 
-export function Photo({ src, label = "Photo", ratio = "4/3", fit = "cover", style }: PhotoProps) {
+export function Photo({ src, label = "Photo", ratio = "4/3", fit = "cover", style, sizes, priority }: PhotoProps) {
   if (src) {
     return (
-      <div style={{ aspectRatio: ratio, width: "100%", overflow: "hidden", ...style }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={label} style={{ width: "100%", height: "100%", objectFit: fit, display: "block" }} />
+      <div style={{ aspectRatio: ratio, width: "100%", overflow: "hidden", position: "relative", ...style }}>
+        <Image src={src} alt={label} fill sizes={sizes ?? "100vw"} priority={priority} style={{ objectFit: fit }} />
       </div>
     );
   }
