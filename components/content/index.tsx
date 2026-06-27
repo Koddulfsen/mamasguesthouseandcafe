@@ -22,7 +22,8 @@ export const COPY = {
     "BBQ nights, jungle walks, and hidden spots only locals know.",
   contactTitle: "Get in touch",
   contactBody:
-    "Booking a room, planning a group visit, curious about activities — just send us a message.",
+    "Booking a room, planning a group visit, curious about activities — message us on WhatsApp and we'll get back to you.",
+  whatsapp: "https://wa.me/601123238262",
 };
 
 export const IMAGES = {
@@ -127,9 +128,11 @@ interface BtnProps {
   type?: "button" | "submit";
   children: React.ReactNode;
   style?: React.CSSProperties;
+  target?: string;
+  rel?: string;
 }
-export function Btn({ href, type = "button", children, style }: BtnProps) {
-  if (href) return <a href={href} className="btn" style={style}>{children}</a>;
+export function Btn({ href, type = "button", children, style, target, rel }: BtnProps) {
+  if (href) return <a href={href} className="btn" style={style} target={target} rel={rel}>{children}</a>;
   return <button type={type} className="btn" style={style}>{children}</button>;
 }
 

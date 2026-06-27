@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { COPY, IMAGES, Photo, NavLinks, ContactFormRaw, Btn } from "../content";
+import { COPY, IMAGES, Photo, NavLinks, Btn } from "../content";
 import { MenuLightbox } from "../MenuLightbox";
 
 const C = {
@@ -57,7 +57,7 @@ export default function SidebarLayout() {
         </div>
         <div style={{ marginTop: "auto", paddingTop: "32px", borderTop: "1px solid var(--c-border)" }}>
           <p style={{ fontSize: "12px", color: "var(--c-muted)", lineHeight: 1.6 }}>{COPY.tagline}</p>
-          <Btn href="#contact" style={{ marginTop: "16px" }}>Book / Contact →</Btn>
+          <Btn href={COPY.whatsapp} target="_blank" rel="noopener noreferrer" style={{ marginTop: "16px" }}>WhatsApp us →</Btn>
         </div>
       </aside>
 
@@ -151,7 +151,8 @@ export default function SidebarLayout() {
         <section id="contact" className="section-contact" style={{ padding: "64px 64px 96px" }}>
           <h2 style={{ fontSize: "32px", fontWeight: 800, marginBottom: "8px", color: "var(--c-text)" }}>{COPY.contactTitle}</h2>
           <p style={{ fontSize: "14px", color: "var(--c-muted)", marginBottom: "40px" }}>{COPY.contactBody}</p>
-          <ContactFormRaw />
+          <p style={{ fontSize: "22px", fontWeight: 700, color: "var(--c-text)", marginBottom: "24px" }}>+60 11 2323 8262</p>
+          <Btn href={COPY.whatsapp} target="_blank" rel="noopener noreferrer">Message us on WhatsApp →</Btn>
         </section>
 
       </main>
