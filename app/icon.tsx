@@ -3,7 +3,11 @@ import { ImageResponse } from 'next/og'
 export const size = { width: 32, height: 32 }
 export const contentType = 'image/png'
 
-export default function Icon() {
+export default async function Icon() {
+  const css = await fetch('https://fonts.googleapis.com/css2?family=Lobster').then(r => r.text())
+  const fontUrl = css.match(/src: url\((.+?)\) format/)?.[1] ?? ''
+  const fontData = await fetch(fontUrl).then(r => r.arrayBuffer())
+
   return new ImageResponse(
     (
       <div
@@ -21,16 +25,18 @@ export default function Icon() {
           style={{
             color: '#f0e6d0',
             fontSize: 22,
-            fontWeight: 900,
-            fontFamily: 'Georgia, serif',
+            fontFamily: 'Lobster',
             lineHeight: 1,
-            marginTop: 1,
+            marginTop: 2,
           }}
         >
           M
         </span>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [{ name: 'Lobster', data: fontData, style: 'normal', weight: 400 }],
+    },
   )
 }
